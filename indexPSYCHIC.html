@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Psychic - Browser Game</title>
+</head>
+<body>
+	<h1>Psychic!</h1>
+	
+	<p>Guess What Letter I'm Thinking Of</p>
+	<p id="wins"></p>
+	<p id="losses"></p>
+	<p id="chances"></p>
+	<p id="guesses"></div>
+
+	<script>
+		//Variables
+	  	var letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+	  	var wins = 0;
+	  	var losses = 0;
+	  	var chances = 10;
+	  	var guesses = [ ];
+	  	var answer = null;
+
+	  	//Functions
+
+	  	function SelectLetter () {
+	  		answer = letters[Math.floor(Math.random() * letters.length)];
+	  		console.log("Computer selected " + answer)
+	  	}
+
+	  	function updateScore() {
+        	document.querySelector("#wins").innerHTML = "Wins: " + wins;
+        	document.querySelector("#losses").innerHTML = "Losses: " + losses;
+        	document.querySelector("#chances").innerHTML = "Chances: " + chances;
+        	document.querySelector("#guesses").innerHTML = "Guesses: " + guesses;
+     	}
+
+     	function reset() {
+     		chances = 10;
+     		guesses = [ ];
+     	}
+
+
+
+	  	//Calling Functions to start
+
+	  	SelectLetter();
+	  	updateScore();
+
+	  	//Actual Functions
+
+	  	document.onkeyup = function(event) {
+
+	  		var letter = String.fromCharCode(event.keyCode).toLowerCase();
+	  		console.log("Button Pressed " + letter)
+
+	  		if (letter == answer) {
+	  			console.log("Correct Answer")
+	  			wins++;
+	  			console.log("Wins: " + wins)
+	  			updateScore();
+	  			SelectLetter();
+	  		}
+	  		else {
+	  			console.log("Wrong Answer")
+	  			guesses.push(letter);
+	  			if (chances > 0){
+	  				chances--;
+	  				updateScore();
+	  			}
+	  			else {
+	  				alert("Game Over");
+	  				losses++;
+	  				reset();
+	  				updateScore();
+
+	  			}
+
+	  		}
+
+
+
+	  	}
+
+	</script>
+
+
+</body>
+</html>

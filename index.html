@@ -10,30 +10,69 @@
 
 
 <body>
-	<div class="wrapper">
-		<h1>Hangman</h1>
-		<h2>A Browser-Based Game</h2>
-		<h4>Kevin de Bree</h4>
-		<button class="btn btn-warning btn-xs theme-button"><span class="glyphicon glyphicon-music"></span> Play Theme!</button>
-        <button class="btn btn-default btn-xs pause-button"><span class="glyphicon glyphicon-pause"></span> Pause Song</button>
-	</div>
-	<div class="wrapper">
-		<div id="holder">
+		<div class="container">
+			<div class="jumbotron">
+				<h1 class="text-center">Hangman</h1>
+				<h2 class="text-center">A Browser-Based Game</h2>
+				<h4 class="text-center">Kevin de Bree</h4>
+				<div class="text-center">
+						<button id="play" class="btn btn-warning btn-xs theme-button"><span class="glyphicon glyphicon-music"></span> Play Theme!</button>
+		        		<button id="pause" class="btn btn-default btn-xs pause-button"><span class="glyphicon glyphicon-pause"></span> Pause Song</button>
+		        </div>
+			</div>
+			<div class="row">
+					<div class="col-lg-6">
+						<div class="panel panel-info">
+							<div class="panel-heading">
+								<h3 class="panel-title text-center">Guess This Word!</h3>
+							</div>
+							<div class="panel-body">
+								<div class="text-center" id="holder">
+								</div>
+								<br>
+								<p id="categoryName"></p>
+							</div>
+						</div>
+					</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-6">
+					<div class="panel panel-info">
+						<div class="panel-heading">
+							<h3 class="panel-title text-center">Scoreboard</h3>
+						</div>
+						<div class="panel-body">
+							<p id="wins"></p>
+							<p id="losses"></p>
+							<p id="chances"></p>
+							<p id="counter"></p>
+							<p id="guesses"></p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-6">
+						<div class="panel panel-info">
+							<div class="panel-heading">
+								<h3 class="panel-title text-center">Too Hard?</h3>
+							</div>
+							<div class="panel-body">
+								<h3 id="clue"></h3>
+								<button id="hint">Hint</button>
+								<button id="reset">Reset</button>
+							</div>
+						</div>
+				</div>
+
+			</div>
 		</div>
-		<p id="categoryName"></p>
-		<p id="wins"></p>
-		<p id="losses"></p>
-		<p id="chances"></p>
-		<p id="counter"></p>
-		<p id="guesses"></p>
-	</div>
-	<div class="container">
-		<button id="hint">Hint</button>
-		<button id="reset">Reset</button>
-	</div>
+
+
+
 	<style>
 		body {
-			background-color: lightblue;
+			background-color: #aee9f5;
 			height: 100%;
 			text-align: center;
 		}
@@ -49,9 +88,14 @@
   		var letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
   		var categories = [
   			['tomato', 'burrito', 'salad', 'hamburger', 'apple' ],
-  			['chicago', 'new york', 'los angeles', 'jerusalem', 'moscow' ],
+  			['chicago', 'new-york', 'los-angeles', 'jerusalem', 'moscow' ],
   			['brazil', 'russia', 'germany', 'china', 'india' ]
   			];
+  		var hints = [
+  			["A Red Vegetable", "A wrap", "A healthy meal", "Not a Berliner", "Grows on a Tree"],
+  			["A windy city", "The first capital of the US", "Named after Mary", "Where heaven and earth meet", "Subarctic Capital"],
+  			["Portuguese Colony", "Once covered an eighth of the world", "United in 1873", "The Middle Kingdom", "Alexander failed to conquer it"]
+  			]
 
 
 	    var wins = 0;
@@ -62,8 +106,16 @@
   		var guess = null;
 	  	var counter = 0;
 	  	var space = null;
-	  	var guesses = [ ];
-	  	var displayguesses = [ ];
+	  	var clue = null;
+	  	var guesses = [];
+	  	var displayguesses = [];
+	  	var categoryIndex = [];
+	  	var hintIndex = [];
+
+	  	var showClue = document.getElementById("clue");
+
+	  	var audioElement = document.createElement("audio");
+	  	audioElement.setAttribute("src", "assets/stayingalive.mp3")
 
 	  	//Functions
 
@@ -105,28 +157,30 @@
         	document.querySelector("#losses").innerHTML = "Losses: " + losses;
         	document.querySelector("#chances").innerHTML = "Chances: " + chances;
         	document.querySelector("#counter").innerHTML = "Correct Letters: " + counter;
-        	document.querySelector("#guesses").innerHTML = "Guesses: " + document.getElementById(displayguesses);
-     	}
-
-     	function reset() {
-     		chances = 10;
-     		guesses = [ ];
+        	document.querySelector("#guesses").innerHTML = "Guesses: " + displayguesses;
      	}
 
 
 	  	function Play () {
-	  		chosenCategory = categories[Math.floor(Math.random() * categories.length)];
-	  		word = chosenCategory[Math.floor(Math.random() * chosenCategory.length)];
-	  		word = word.replace(/\s/g, "-");
-	  		console.log(word);
-
-	  		guesses = [ ];
-	  		displayguesses = [ ];
 	  		chances = 10;
 	  		counter = 0;
 	  		space = 0;
+	  		displayguesses = [];
+	  		guesses = [];
+	  		clue = null;
+	  		showClue.innerHTML = "Click to See Hint";
+
+	  		chosenCategory = categories[Math.floor(Math.random() * categories.length)];
+	  		word = chosenCategory[Math.floor(Math.random() * chosenCategory.length)];
+	  		word = word.replace(/\s/g, "-");
+	  		categoryIndex = categories.indexOf(chosenCategory);
+			hintIndex = chosenCategory.indexOf(word);
+	  		console.log(word);
+
+
 
 	  		CategoryTooltip ();
+	  		updateScore();
 	  		Encode();
 
 
@@ -144,7 +198,6 @@
 	  		var guess = String.fromCharCode(event.keyCode).toLowerCase();
 	  		console.log("Button Pressed " + guess)
 	  		if (letters.indexOf(guess) != -1) {
-	  			console.log("Correct Button")
 	  			displayguesses.push(guess);
 		  		for (var i = 0; i < word.length; i++) {
 		  			if (word[i] === guess) {
@@ -168,7 +221,26 @@
 	  			guess = null;
 	  		}
 
+	  	}
 
+	  	document.getElementById('reset').onclick = function() {
+	  		correct.parentNode.removeChild(correct);
+			Play();
+			console.log("reset")
+	  	}
+
+	  	document.getElementById('hint').onclick = function() {
+			showClue.innerHTML = "Hint: - " + hints [categoryIndex][hintIndex];
+			console.log("Hint")
+	  	}
+
+	  		document.getElementById('play').onclick = function() {
+	  		audioElement.play();
+	  	}
+
+	  		document.getElementById('pause').onclick = function() {
+	  		audioElement.pause();
+	  	}
 
 
 	  		// if (letter == answer) {
@@ -197,7 +269,7 @@
 
 
 
-	  	}
+	  	
 
 
 

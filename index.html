@@ -3,6 +3,7 @@
 <head>
   	<meta charset="UTF-8">
 	<title>Hangman - A Browser-Based Game</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 </head>
 
@@ -38,17 +39,18 @@
   		//Defining Variables
   		var letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
   		var categories = [
-  			['tomato', 'burrito', 'salad', 'hamburger', 'apple']
-  			['chicago', 'new york', 'los angeles', 'jerusalem', 'moscow']
-  			['brazil', 'russia', 'germany', 'china', 'india']
+  			['tomato', 'burrito', 'salad', 'hamburger', 'apple' ],
+  			['chicago', 'new york', 'los angeles', 'jerusalem', 'moscow' ],
+  			['brazil', 'russia', 'germany', 'china', 'india' ]
   			];
 
 
-  		var chosenCategory = null;
-  		var word = null;
 	    var wins = 0;
 	  	var losses = 0;
 	  	var chances = 10;
+  		var chosenCategory = null;
+  		var word = null;
+  		var guess = null;
 	  	var counter = null;
 	  	var space = null;
 	  	var guesses = [ ];
@@ -66,7 +68,28 @@
 
 	  	}
 
-	  	function play () {
+	  	function Encode () {
+	  		wordHolder = document.getElementByID('holder');
+	  		correct = document.createElement('ul');
+	  		for (var i = 0; i < word.length; i++) {
+	  			correct.setAttribute('id', 'my-word')
+	  			guess = document.createElement('li');
+	  			guess.setAttribute('class', 'guess');
+	  			if (word[i] === "-") {
+	  				guess.innerHTML = "-";
+	  				space = 1;
+	  			} else {
+	  				guess.innerHTML = "_";
+	  			}
+
+	  			guesses.push(guess);
+	  			wordHolder.appendChild(correct);
+	  			correct.appendChild(guess);
+	  		}
+
+	  	}
+
+	  	function Play () {
 	  		chosenCategory = categories[Math.floor(Math.random() * categories.length)];
 	  		word = chosenCategory[Math.floor(Math.random() * chosenCategory.length)];
 	  		word = word.replace(/\s/g, "-");
@@ -77,7 +100,18 @@
 	  		counter = 0;
 	  		space = 0;
 
+	  		CategoryTooltip ();
+	  		Encode();
+
+
 	  	}
+
+
+	  	//Calling Functions to Start
+
+	  	Play();
+
+	  	
 
 
 

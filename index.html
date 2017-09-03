@@ -24,7 +24,7 @@
 		<p id="wins"></p>
 		<p id="losses"></p>
 		<p id="chances"></p>
-		<p id="chances"></p>
+		<p id="counter"></p>
 		<p id="guesses"></p>
 	</div>
 	<div class="container">
@@ -60,7 +60,7 @@
   		var chosenCategory = null;
   		var word = null;
   		var guess = null;
-	  	var counter = null;
+	  	var counter = 0;
 	  	var space = null;
 	  	var guesses = [ ];
 
@@ -102,6 +102,7 @@
         	document.querySelector("#wins").innerHTML = "Wins: " + wins;
         	document.querySelector("#losses").innerHTML = "Losses: " + losses;
         	document.querySelector("#chances").innerHTML = "Chances: " + chances;
+        	document.querySelector("#counter").innerHTML = "Correct Letters: " + counter;
         	document.querySelector("#guesses").innerHTML = "Guesses: " + guesses;
      	}
 
@@ -139,21 +140,31 @@
 
 	  		var guess = String.fromCharCode(event.keyCode).toLowerCase();
 	  		console.log("Button Pressed " + guess)
+	  		if (letters.indexOf(guess) != -1) {
+	  			console.log("Correct Button")
+		  		for (var i = 0; i < word.length; i++) {
+		  			if (word[i] === guess) {
+		  				guesses[i].innerHTML = guess;
+		  				counter += 1;
+		  				console.log("Correct Guess")
+		  				
+		  			}
+		  		}
+		  		var test = (word.indexOf(guess));
+		  		if (test === -1) {
+		  			chances -= 1;
+		  			updateScore();
+		  		} else {
+		  			updateScore();
+		  		}
 
-	  		for (var i = 0; i < word.length; i++) {
-	  			if (word[i] === guess) {
-	  				guesses[i].innerHTML = guess;
-	  				counter += 1;
-	  				console.log("Correct Guess")
-	  				updateScore();
-	  			} else {
-	  				guesses.push(guess);
-	  				console.log("Incorrect Guess")
-	  				chances -= 1;
-	  				updateScore();
-
-	  			}
+	  		} else {
+	  			console.log("Invalid Button")
+	  			guess = null;
 	  		}
+
+
+
 
 	  		// if (letter == answer) {
 	  		// 	console.log("Correct Answer")

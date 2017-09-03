@@ -4,6 +4,7 @@
   	<meta charset="UTF-8">
 	<title>Hangman - A Browser-Based Game</title>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 
 </head>
 
@@ -13,6 +14,8 @@
 		<h1>Hangman</h1>
 		<h2>A Browser-Based Game</h2>
 		<h4>Kevin de Bree</h4>
+		<button class="btn btn-warning btn-xs theme-button"><span class="glyphicon glyphicon-music"></span> Play Theme!</button>
+        <button class="btn btn-default btn-xs pause-button"><span class="glyphicon glyphicon-pause"></span> Pause Song</button>
 	</div>
 	<div class="wrapper">
 		<div id="holder">
@@ -32,6 +35,11 @@
 			background-color: lightblue;
 			height: 100%;
 			text-align: center;
+		}
+
+		ul#my-word li {
+			display:inline;
+			padding: 0 10px;
 		}
 
 	</style>
@@ -69,7 +77,7 @@
 	  	}
 
 	  	function Encode () {
-	  		wordHolder = document.getElementByID('holder');
+	  		wordHolder = document.getElementById('holder');
 	  		correct = document.createElement('ul');
 	  		for (var i = 0; i < word.length; i++) {
 	  			correct.setAttribute('id', 'my-word')
@@ -111,7 +119,47 @@
 
 	  	Play();
 
-	  	
+	  	//Actual Functions
+
+		document.onkeyup = function(event) {
+
+	  		var guess = String.fromCharCode(event.keyCode).toLowerCase();
+	  		console.log("Button Pressed " + guess)
+
+	  		for (var i = 0; i < word.length; i++) {
+	  			if (word[i] === guess) {
+	  				guesses[i].innerHTML = guess;
+	  				counter += 1;
+	  			}
+	  		}
+
+	  		// if (letter == answer) {
+	  		// 	console.log("Correct Answer")
+	  		// 	wins++;
+	  		// 	console.log("Wins: " + wins)
+	  		// 	updateScore();
+	  		// 	SelectLetter();
+	  		// }
+	  		// else {
+	  		// 	console.log("Wrong Answer")
+	  		// 	guesses.push(letter);
+	  		// 	if (chances > 0){
+	  		// 		chances--;
+	  		// 		updateScore();
+	  		// 	}
+	  		// 	else {
+	  		// 		alert("Game Over");
+	  		// 		losses++;
+	  		// 		reset();
+	  		// 		updateScore();
+
+	  		// 	}
+
+	  		// }
+
+
+
+	  	}
 
 
 

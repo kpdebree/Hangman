@@ -24,6 +24,7 @@
 		<p id="wins"></p>
 		<p id="losses"></p>
 		<p id="chances"></p>
+		<p id="chances"></p>
 		<p id="guesses"></p>
 	</div>
 	<div class="container">
@@ -97,6 +98,19 @@
 
 	  	}
 
+	  	function updateScore() {
+        	document.querySelector("#wins").innerHTML = "Wins: " + wins;
+        	document.querySelector("#losses").innerHTML = "Losses: " + losses;
+        	document.querySelector("#chances").innerHTML = "Chances: " + chances;
+        	document.querySelector("#guesses").innerHTML = "Guesses: " + guesses;
+     	}
+
+     	function reset() {
+     		chances = 10;
+     		guesses = [ ];
+     	}
+
+
 	  	function Play () {
 	  		chosenCategory = categories[Math.floor(Math.random() * categories.length)];
 	  		word = chosenCategory[Math.floor(Math.random() * chosenCategory.length)];
@@ -130,6 +144,14 @@
 	  			if (word[i] === guess) {
 	  				guesses[i].innerHTML = guess;
 	  				counter += 1;
+	  				console.log("Correct Guess")
+	  				updateScore();
+	  			} else {
+	  				guesses.push(guess);
+	  				console.log("Incorrect Guess")
+	  				chances -= 1;
+	  				updateScore();
+
 	  			}
 	  		}
 

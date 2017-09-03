@@ -63,6 +63,7 @@
 	  	var counter = 0;
 	  	var space = null;
 	  	var guesses = [ ];
+	  	var displayguesses = [ ];
 
 	  	//Functions
 
@@ -92,6 +93,7 @@
 	  			}
 
 	  			guesses.push(guess);
+	  			displayguesses.push(guess);
 	  			wordHolder.appendChild(correct);
 	  			correct.appendChild(guess);
 	  		}
@@ -103,7 +105,7 @@
         	document.querySelector("#losses").innerHTML = "Losses: " + losses;
         	document.querySelector("#chances").innerHTML = "Chances: " + chances;
         	document.querySelector("#counter").innerHTML = "Correct Letters: " + counter;
-        	document.querySelector("#guesses").innerHTML = "Guesses: " + guesses;
+        	document.querySelector("#guesses").innerHTML = "Guesses: " + document.getElementById(displayguesses);
      	}
 
      	function reset() {
@@ -119,6 +121,7 @@
 	  		console.log(word);
 
 	  		guesses = [ ];
+	  		displayguesses = [ ];
 	  		chances = 10;
 	  		counter = 0;
 	  		space = 0;
@@ -142,6 +145,7 @@
 	  		console.log("Button Pressed " + guess)
 	  		if (letters.indexOf(guess) != -1) {
 	  			console.log("Correct Button")
+	  			displayguesses.push(guess);
 		  		for (var i = 0; i < word.length; i++) {
 		  			if (word[i] === guess) {
 		  				guesses[i].innerHTML = guess;
@@ -153,6 +157,7 @@
 		  		var test = (word.indexOf(guess));
 		  		if (test === -1) {
 		  			chances -= 1;
+
 		  			updateScore();
 		  		} else {
 		  			updateScore();
@@ -200,6 +205,9 @@
 
   </script>
 
+<footer>
+	Test 1
+</footer>
 
 </body>
 </html>
